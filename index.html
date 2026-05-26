@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO-SOLID Mariusz Flak – Remonty, Wykończenia, Budowa</title>
+<meta name="description" content="PRO-SOLID – profesjonalne remonty, wykończenia wnętrz, prace budowlane, instalacje i prace dachowe. Solidnie, terminowo, estetycznie.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Mulish:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #141C26;
+    --bg2: #1C2737;
+    --bg3: #232F3E;
+    --accent: #D4870E;
+    --accent2: #F0A030;
+    --text: #EEE9E0;
+    --muted: #8FA4B8;
+    --border: rgba(255,255,255,0.08);
+    --white: #ffffff;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Mulish', sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    font-size: 16px;
+    overflow-x: hidden;
+  }
+
+  /* ── NAVIGATION ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(20, 28, 38, 0.96);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 70px;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none;
+  }
+  .nav-logo-mark {
+    width: 38px; height: 38px;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    clip-path: polygon(0 0, 100% 0, 100% 75%, 75% 100%, 0 100%);
+  }
+  .nav-logo-mark span {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700; font-size: 14px;
+    color: #fff; letter-spacing: 0.05em;
+  }
+  .nav-logo-text {
+    display: flex; flex-direction: column; line-height: 1.1;
+  }
+  .nav-logo-text strong {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600; font-size: 18px;
+    color: var(--white); letter-spacing: 0.08em;
+  }
+  .nav-logo-text small {
+    font-size: 10px; color: var(--muted);
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .nav-links {
+    display: flex; gap: 32px; list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Mulish', sans-serif;
+    font-weight: 500; font-size: 13px;
+    color: var(--muted); text-decoration: none;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent2); }
+  .nav-cta {
+    background: var(--accent);
+    color: #fff !important;
+    padding: 8px 20px;
+    font-size: 12px !important;
+    letter-spacing: 0.1em !important;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--accent2) !important; color: #fff !important; }
+  .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--text); transition: 0.3s; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 120px 5% 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      linear-gradient(135deg, rgba(212,135,14,0.06) 0%, transparent 50%),
+      linear-gradient(to bottom, var(--bg) 0%, var(--bg2) 100%);
+  }
+  .hero-grid-lines {
+    position: absolute; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-accent-bar {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 4px; background: var(--accent);
+    z-index: 1;
+  }
+  .hero-content {
+    position: relative; z-index: 1;
+    max-width: 760px;
+  }
+  .hero-tag {
+    display: inline-block;
+    font-family: 'Mulish', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent2);
+    border: 1px solid rgba(212,135,14,0.4);
+    padding: 5px 14px; margin-bottom: 28px;
+  }
+  .hero-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(48px, 7vw, 82px);
+    font-weight: 700;
+    line-height: 1.0;
+    letter-spacing: -0.01em;
+    color: var(--white);
+    margin-bottom: 24px;
+  }
+  .hero-title .accent { color: var(--accent); }
+  .hero-desc {
+    font-size: 17px; font-weight: 300;
+    color: var(--muted); max-width: 540px;
+    line-height: 1.8; margin-bottom: 44px;
+  }
+  .hero-actions {
+    display: flex; gap: 16px; flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    padding: 14px 32px;
+    font-family: 'Mulish', sans-serif;
+    font-size: 13px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    padding: 14px 32px;
+    font-family: 'Mulish', sans-serif;
+    font-size: 13px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    text-decoration: none; border: 1px solid var(--border);
+    cursor: pointer; transition: border-color 0.2s, color 0.2s;
+    display: inline-block;
+  }
+  .btn-outline:hover { border-color: rgba(212,135,14,0.5); color: var(--accent2); }
+  .hero-stats {
+    position: absolute; bottom: 60px; right: 5%; z-index: 1;
+    display: flex; gap: 48px;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat-num {
+    font-family: 'Oswald', sans-serif;
+    font-size: 42px; font-weight: 600;
+    color: var(--accent); line-height: 1;
+  }
+  .hero-stat-label {
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-top: 4px;
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 100px 5%; }
+  .section-label {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(32px, 4vw, 50px);
+    font-weight: 600; color: var(--white);
+    line-height: 1.1; margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 16px; font-weight: 300;
+    color: var(--muted); max-width: 580px;
+    line-height: 1.8;
+  }
+  .section-header { margin-bottom: 56px; }
+
+  /* ── OFFER ── */
+  #oferta { background: var(--bg2); }
+  .offer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2px;
+  }
+  .offer-card {
+    background: var(--bg3);
+    padding: 36px 32px;
+    position: relative; overflow: hidden;
+    transition: background 0.2s;
+    cursor: default;
+  }
+  .offer-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 3px; height: 0;
+    background: var(--accent);
+    transition: height 0.3s;
+  }
+  .offer-card:hover::before { height: 100%; }
+  .offer-card:hover { background: #263040; }
+  .offer-num {
+    font-family: 'Oswald', sans-serif;
+    font-size: 52px; font-weight: 700;
+    color: rgba(212,135,14,0.12);
+    position: absolute; top: 16px; right: 24px;
+    line-height: 1;
+  }
+  .offer-icon {
+    width: 48px; height: 48px;
+    background: rgba(212,135,14,0.1);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+  }
+  .offer-icon svg { width: 24px; height: 24px; stroke: var(--accent); fill: none; stroke-width: 1.5; }
+  .offer-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 20px; font-weight: 600;
+    color: var(--white); margin-bottom: 14px;
+    letter-spacing: 0.02em;
+  }
+  .offer-list {
+    list-style: none; display: flex; flex-direction: column; gap: 6px;
+  }
+  .offer-list li {
+    font-size: 14px; color: var(--muted);
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .offer-list li::before {
+    content: '—';
+    color: var(--accent); flex-shrink: 0; margin-top: 1px;
+  }
+
+  /* ── ABOUT ── */
+  #o-firmie { background: var(--bg); }
+  .about-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+  }
+  .about-visual {
+    position: relative;
+  }
+  .about-frame {
+    width: 100%; aspect-ratio: 4/3;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 16px;
+    position: relative; overflow: hidden;
+  }
+  .about-frame-corner {
+    position: absolute;
+    width: 32px; height: 32px;
+    border-color: var(--accent);
+    border-style: solid;
+  }
+  .about-frame-corner.tl { top: 12px; left: 12px; border-width: 2px 0 0 2px; }
+  .about-frame-corner.tr { top: 12px; right: 12px; border-width: 2px 2px 0 0; }
+  .about-frame-corner.bl { bottom: 12px; left: 12px; border-width: 0 0 2px 2px; }
+  .about-frame-corner.br { bottom: 12px; right: 12px; border-width: 0 2px 2px 0; }
+  .about-frame-icon { opacity: 0.15; }
+  .about-frame-icon svg { width: 72px; height: 72px; stroke: var(--accent); fill: none; stroke-width: 1; }
+  .about-frame-text {
+    font-family: 'Oswald', sans-serif;
+    font-size: 28px; font-weight: 600;
+    color: rgba(255,255,255,0.08);
+    text-transform: uppercase; letter-spacing: 0.15em;
+  }
+  .about-badge {
+    position: absolute; bottom: -20px; right: -20px;
+    width: 100px; height: 100px;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+  }
+  .about-badge strong {
+    font-family: 'Oswald', sans-serif;
+    font-size: 28px; font-weight: 700; color: #fff;
+    line-height: 1;
+  }
+  .about-badge span {
+    font-size: 10px; font-weight: 600;
+    color: rgba(255,255,255,0.8);
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .about-text p {
+    color: var(--muted); font-size: 15px;
+    line-height: 1.9; margin-bottom: 20px;
+  }
+  .about-text p:last-child { margin-bottom: 0; }
+
+  /* ── WHY ── */
+  #dlaczego { background: var(--bg2); }
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+  }
+  .why-card {
+    padding: 32px 28px;
+    border: 1px solid var(--border);
+    position: relative;
+    transition: border-color 0.2s;
+  }
+  .why-card:hover { border-color: rgba(212,135,14,0.35); }
+  .why-icon {
+    width: 44px; height: 44px;
+    border: 1px solid rgba(212,135,14,0.3);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+  }
+  .why-icon svg { width: 22px; height: 22px; stroke: var(--accent); fill: none; stroke-width: 1.5; }
+  .why-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 17px; font-weight: 600;
+    color: var(--white); margin-bottom: 10px;
+    letter-spacing: 0.02em;
+  }
+  .why-text { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  /* ── CONTACT ── */
+  #kontakt { background: var(--bg); }
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 60px; align-items: start;
+  }
+  .contact-info-item {
+    display: flex; gap: 16px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .contact-info-item:first-child { border-top: 1px solid var(--border); }
+  .contact-info-icon {
+    width: 40px; height: 40px; flex-shrink: 0;
+    background: rgba(212,135,14,0.08);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .contact-info-icon svg { width: 18px; height: 18px; stroke: var(--accent); fill: none; stroke-width: 1.5; }
+  .contact-info-label {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 4px;
+  }
+  .contact-info-value {
+    font-size: 15px; color: var(--text); font-weight: 500;
+  }
+  .contact-info-note { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .contact-form {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 40px;
+  }
+  .contact-form h3 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 22px; font-weight: 600;
+    color: var(--white); margin-bottom: 28px;
+    letter-spacing: 0.03em;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label {
+    display: block; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 8px;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%; background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 16px;
+    font-family: 'Mulish', sans-serif;
+    font-size: 14px; outline: none;
+    transition: border-color 0.2s;
+    appearance: none; resize: vertical;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: rgba(212,135,14,0.6); }
+  .form-group textarea { min-height: 110px; }
+  .form-note { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+
+  /* ── FUNDING LOGOS ── */
+  #dofinansowanie {
+    background: var(--bg2);
+    padding: 60px 5%;
+    border-top: 1px solid var(--border);
+  }
+  .funding-label {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--muted); text-align: center;
+    margin-bottom: 28px;
+  }
+  .funding-logos {
+    display: flex; align-items: center; justify-content: center;
+    flex-wrap: wrap; gap: 32px;
+  }
+  .funding-placeholder {
+    height: 60px;
+    border: 1px dashed rgba(255,255,255,0.15);
+    padding: 0 28px;
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.2);
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .funding-placeholder svg { width: 16px; height: 16px; stroke: currentColor; fill: none; opacity: 0.5; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #0C1520;
+    padding: 40px 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px; flex-wrap: wrap;
+    border-top: 1px solid var(--border);
+  }
+  .footer-copy { font-size: 13px; color: var(--muted); }
+  .footer-copy strong { color: var(--text); font-weight: 600; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a {
+    font-size: 12px; color: var(--muted); text-decoration: none;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--accent); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .about-layout,
+    .contact-layout { grid-template-columns: 1fr; }
+    .about-badge { display: none; }
+    .hero-stats { position: static; flex-direction: row; margin-top: 48px; }
+    #hero { flex-direction: column; justify-content: center; }
+    .hero-content { max-width: 100%; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    section { padding: 70px 5%; }
+    .offer-grid { grid-template-columns: 1fr; gap: 2px; }
+    .why-grid { grid-template-columns: 1fr 1fr; }
+    .hero-stats { gap: 28px; }
+    .contact-form { padding: 28px 20px; }
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-tag   { animation: fadeUp 0.6s ease 0.1s both; }
+  .hero-title { animation: fadeUp 0.6s ease 0.25s both; }
+  .hero-desc  { animation: fadeUp 0.6s ease 0.4s both; }
+  .hero-actions { animation: fadeUp 0.6s ease 0.55s both; }
+  .hero-stats { animation: fadeUp 0.6s ease 0.7s both; }
+</style>
+</head>
+<body>
+
+<!-- ══ NAVIGATION ══ -->
+<nav>
+  <a href="#hero" class="nav-logo">
+    <div class="nav-logo-mark"><span>PS</span></div>
+    <div class="nav-logo-text">
+      <strong>PRO-SOLID</strong>
+      <small>Mariusz Flak</small>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#oferta">Oferta</a></li>
+    <li><a href="#o-firmie">O firmie</a></li>
+    <li><a href="#dlaczego">Dlaczego my</a></li>
+    <li><a href="#kontakt" class="nav-cta">Kontakt</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Mobile menu overlay (hidden by default) -->
+<div id="mobile-menu" style="display:none; position:fixed; inset:0; z-index:99; background:rgba(12,21,32,0.97); flex-direction:column; align-items:center; justify-content:center; gap:36px;">
+  <a href="#hero" onclick="toggleMenu()" style="font-family:'Oswald',sans-serif;font-size:28px;color:var(--text);text-decoration:none;letter-spacing:0.05em;">Start</a>
+  <a href="#oferta" onclick="toggleMenu()" style="font-family:'Oswald',sans-serif;font-size:28px;color:var(--text);text-decoration:none;letter-spacing:0.05em;">Oferta</a>
+  <a href="#o-firmie" onclick="toggleMenu()" style="font-family:'Oswald',sans-serif;font-size:28px;color:var(--text);text-decoration:none;letter-spacing:0.05em;">O firmie</a>
+  <a href="#dlaczego" onclick="toggleMenu()" style="font-family:'Oswald',sans-serif;font-size:28px;color:var(--text);text-decoration:none;letter-spacing:0.05em;">Dlaczego my</a>
+  <a href="#kontakt" onclick="toggleMenu()" style="font-family:'Oswald',sans-serif;font-size:28px;color:var(--accent);text-decoration:none;letter-spacing:0.05em;">Kontakt</a>
+  <div onclick="toggleMenu()" style="position:absolute;top:20px;right:24px;cursor:pointer;font-size:28px;color:var(--muted);">✕</div>
+</div>
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid-lines"></div>
+  <div class="hero-accent-bar"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Budownictwo &amp; Wykończenia</div>
+    <h1 class="hero-title">
+      Solidne remonty<br>
+      i <span class="accent">wykończenia</span><br>
+      od podstaw
+    </h1>
+    <p class="hero-desc">
+      PRO-SOLID to kompleksowe usługi remontowe, budowlane i instalacyjne.
+      Pracujemy rzetelnie, terminowo i z dbałością o każdy detal – od piwnicy po dach.
+    </p>
+    <div class="hero-actions">
+      <a href="#kontakt" class="btn-primary">Bezpłatna wycena</a>
+      <a href="#oferta" class="btn-outline">Zobacz ofertę</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">6+</div>
+      <div class="hero-stat-label">Obszarów<br>usług</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">100%</div>
+      <div class="hero-stat-label">Własny<br>sprzęt</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">1</div>
+      <div class="hero-stat-label">Kontakt,<br>kompleksowo</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ OFFER ══ -->
+<section id="oferta">
+  <div class="section-header">
+    <div class="section-label">Zakres usług</div>
+    <h2 class="section-title">Pełna oferta<br>PRO-SOLID</h2>
+    <p class="section-sub">Obsługujemy inwestycje mieszkaniowe i komercyjne – kompleksowo lub w wybranym zakresie.</p>
+  </div>
+  <div class="offer-grid">
+
+    <!-- 1 -->
+    <div class="offer-card">
+      <div class="offer-num">01</div>
+      <div class="offer-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div class="offer-title">Remonty i wykończenia wnętrz</div>
+      <ul class="offer-list">
+        <li>Remonty domów i pomieszczeń</li>
+        <li>Wykończenia nowych budynków</li>
+        <li>Modernizacja starszych obiektów</li>
+        <li>Prace przygotowawcze i wykończeniowe</li>
+        <li>Prace glazurnicze</li>
+      </ul>
+    </div>
+
+    <!-- 2 -->
+    <div class="offer-card">
+      <div class="offer-num">02</div>
+      <div class="offer-icon">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </div>
+      <div class="offer-title">Prace ogólnobudowlane</div>
+      <ul class="offer-list">
+        <li>Prace remontowo-budowlane</li>
+        <li>Prace montażowe</li>
+        <li>Przygotowanie pod kolejne etapy</li>
+        <li>Drobne i większe prace techniczne</li>
+      </ul>
+    </div>
+
+    <!-- 3 -->
+    <div class="offer-card">
+      <div class="offer-num">03</div>
+      <div class="offer-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2v6M6.34 7.34l-4.24 4.24M2 12h6M2.34 17.66l4.24-4.24M12 22v-6M17.66 17.66l4.24-4.24M22 12h-6M17.66 6.34l-4.24 4.24"/></svg>
+      </div>
+      <div class="offer-title">Instalacje</div>
+      <ul class="offer-list">
+        <li>Instalacje wodno-kanalizacyjne</li>
+        <li>Prace hydrauliczne</li>
+        <li>Instalacje centralnego ogrzewania</li>
+        <li>Ogrzewanie podłogowe</li>
+      </ul>
+    </div>
+
+    <!-- 4 -->
+    <div class="offer-card">
+      <div class="offer-num">04</div>
+      <div class="offer-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-6 9 6v11H3z"/><path d="M9 22V12h6v10"/><path d="M3 9h18"/></svg>
+      </div>
+      <div class="offer-title">Dachy</div>
+      <ul class="offer-list">
+        <li>Remonty i naprawy dachów</li>
+        <li>Krycie membraną PVC i papą</li>
+        <li>Obróbki blacharskie</li>
+        <li>Prace dekarskie</li>
+      </ul>
+    </div>
+
+    <!-- 5 -->
+    <div class="offer-card">
+      <div class="offer-num">05</div>
+      <div class="offer-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 22V12"/><path d="M20 16.58A5 5 0 0018 7h-1.26A8 8 0 104 15.25"/><path d="M16 22l-4-4-4 4"/></svg>
+      </div>
+      <div class="offer-title">Izolacje i drenaże</div>
+      <ul class="offer-list">
+        <li>Hydroizolacje i izolacje</li>
+        <li>Izolacje fundamentów</li>
+        <li>Drenaż wokół budynku</li>
+        <li>Zabezpieczenia przeciwwilgociowe</li>
+      </ul>
+    </div>
+
+    <!-- 6 -->
+    <div class="offer-card">
+      <div class="offer-num">06</div>
+      <div class="offer-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
+      </div>
+      <div class="offer-title">Prace zewnętrzne</div>
+      <ul class="offer-list">
+        <li>Ogrodzenia i tarasy</li>
+        <li>Schody zewnętrzne</li>
+        <li>Przygotowanie terenu</li>
+        <li>Trawniki z siewu lub z rolki</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ ABOUT ══ -->
+<section id="o-firmie">
+  <div class="about-layout">
+    <div class="about-visual">
+      <div class="about-frame">
+        <div class="about-frame-corner tl"></div>
+        <div class="about-frame-corner tr"></div>
+        <div class="about-frame-corner bl"></div>
+        <div class="about-frame-corner br"></div>
+        <div class="about-frame-icon">
+          <svg viewBox="0 0 24 24"><path d="M2 20h20M4 20V10L12 4l8 6v10"/><path d="M9 20v-6h6v6"/><path d="M12 4v4"/></svg>
+        </div>
+        <div class="about-frame-text">PRO-SOLID</div>
+      </div>
+      <div class="about-badge">
+        <strong>PRO</strong>
+        <span>Solid</span>
+      </div>
+    </div>
+    <div class="about-text">
+      <div class="section-label">O firmie</div>
+      <h2 class="section-title">Rzetelność<br>w każdym etapie</h2>
+      <p>
+        PRO-SOLID to firma remontowo-budowlana działająca na rynku usług wykończeniowych i budowlanych.
+        Zajmujemy się kompleksową obsługą inwestycji – zarówno tych dużych, jak i mniejszych,
+        wymagających precyzji i doświadczenia.
+      </p>
+      <p>
+        Dysponujemy własnym sprzętem i narzędziami, co pozwala nam sprawnie realizować zlecenia
+        bez zbędnych opóźnień. Pracujemy uczciwie – z szacunkiem dla czasu i budżetu klienta.
+      </p>
+      <p>
+        Każde zlecenie traktujemy indywidualnie. Zanim przystąpimy do pracy, dokładnie
+        analizujemy zakres i warunki, by zaproponować optymalne rozwiązanie – bez ukrytych kosztów.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WHY ══ -->
+<section id="dlaczego">
+  <div class="section-header">
+    <div class="section-label">Dlaczego PRO-SOLID</div>
+    <h2 class="section-title">Co nas<br>wyróżnia</h2>
+    <p class="section-sub">Kilka powodów, dla których klienci wracają i polecają nas dalej.</p>
+  </div>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <div class="why-title">Szeroki zakres</div>
+      <p class="why-text">Od remontu wnętrza po izolację fundamentów i krycie dachu – obsługujemy cały dom w jednym miejscu.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="why-title">Terminowość</div>
+      <p class="why-text">Dotrzymujemy ustalonych terminów. Przed realizacją precyzyjnie ustalamy harmonogram i go przestrzegamy.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">
+        <svg viewBox="0 0 24 24"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"/><path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/><path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"/><path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"/><path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"/><path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/><path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"/><path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z"/></svg>
+      </div>
+      <div class="why-title">Własny sprzęt</div>
+      <p class="why-text">Dysponujemy kompletnym zapleczem narzędziowym. Nie czekamy na podwykonawców ani wypożyczalnie.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="why-title">Rzetelność</div>
+      <p class="why-text">Pracujemy uczciwie i transparentnie. Wycena przed realizacją, brak ukrytych kosztów.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M8 11l2 2 4-4"/></svg>
+      </div>
+      <div class="why-title">Estetyka wykonania</div>
+      <p class="why-text">Zależy nam na jakości wykończenia. Każdy detal ma znaczenie – to nasza wizytówka.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      </div>
+      <div class="why-title">Indywidualne podejście</div>
+      <p class="why-text">Każde zlecenie jest inne. Słuchamy, doradzamy i dostosowujemy się do Państwa potrzeb i możliwości.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══ -->
+<section id="kontakt">
+  <div class="section-header">
+    <div class="section-label">Skontaktuj się</div>
+    <h2 class="section-title">Bezpłatna wycena<br>bez zobowiązań</h2>
+    <p class="section-sub">Opisz zakres prac, a wrócimy do Ciebie z wyceną i terminem realizacji.</p>
+  </div>
+  <div class="contact-layout">
+    <div class="contact-info">
+      <div class="contact-info-item">
+        <div class="contact-info-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11.5 19.79 19.79 0 01.12 2.84 2 2 0 012.1 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        </div>
+        <div>
+          <div class="contact-info-label">Telefon</div>
+          <div class="contact-info-value">+48 &nbsp;– – – &nbsp;– – – &nbsp;– – –</div>
+          <div class="contact-info-note">Dane kontaktowe zostaną uzupełnione przed publikacją</div>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-info-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div>
+          <div class="contact-info-label">E-mail</div>
+          <div class="contact-info-value">kontakt@prosolid.pl</div>
+          <div class="contact-info-note">Odpowiadamy w ciągu 1 dnia roboczego</div>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-info-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div>
+          <div class="contact-info-label">Obszar działania</div>
+          <div class="contact-info-value">Region śląski i okolice</div>
+          <div class="contact-info-note">Dojazd do klienta w celu oględzin i wyceny</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form">
+      <h3>Napisz do nas</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Imię i nazwisko</label>
+          <input type="text" placeholder="Jan Kowalski">
+        </div>
+        <div class="form-group">
+          <label>Telefon</label>
+          <input type="tel" placeholder="+48 000 000 000">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Adres e-mail</label>
+        <input type="email" placeholder="adres@email.pl">
+      </div>
+      <div class="form-group">
+        <label>Rodzaj usługi</label>
+        <select>
+          <option value="" disabled selected>Wybierz zakres prac…</option>
+          <option>Remont / wykończenie wnętrz</option>
+          <option>Prace ogólnobudowlane</option>
+          <option>Instalacje (hydraulika, CO)</option>
+          <option>Dach (krycie, remont)</option>
+          <option>Izolacje i drenaże</option>
+          <option>Prace zewnętrzne</option>
+          <option>Zakres kompleksowy</option>
+          <option>Inne</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Opis zlecenia</label>
+        <textarea placeholder="Opisz krótko zakres prac, lokalizację i preferowany termin realizacji…"></textarea>
+      </div>
+      <p class="form-note">* Formularz poglądowy – przed publikacją zostanie podpięty pod skrzynkę e-mail.</p>
+      <button class="btn-primary" style="width:100%; text-align:center; border:none;">Wyślij zapytanie</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FUNDING LOGOS ══ -->
+<div id="dofinansowanie">
+  <div class="funding-label">Dofinansowanie / Logotypy partnerów i programów wsparcia</div>
+  <div class="funding-logos">
+    <div class="funding-placeholder">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      Logotyp 1
+    </div>
+    <div class="funding-placeholder">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      Logotyp 2
+    </div>
+    <div class="funding-placeholder">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      Logotyp 3
+    </div>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-copy">
+    © 2025 <strong>PRO-SOLID Mariusz Flak</strong>. Wszelkie prawa zastrzeżone.
+  </div>
+  <nav class="footer-links">
+    <a href="#oferta">Oferta</a>
+    <a href="#o-firmie">O firmie</a>
+    <a href="#kontakt">Kontakt</a>
+  </nav>
+</footer>
+
+<script>
+  function toggleMenu() {
+    var m = document.getElementById('mobile-menu');
+    m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+  }
+
+  /* Subtle scroll-reveal */
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.offer-card, .why-card').forEach(function(el, i) {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease ' + (i * 0.07) + 's, transform 0.5s ease ' + (i * 0.07) + 's';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
