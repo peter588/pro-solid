@@ -580,10 +580,10 @@
       display: block; width: 100%;
     }
 
-    /* Nav: flow directly below EU bar, no fixed positioning */
+    /* Nav: sticky at top — kicks in after EU bar scrolls away */
     nav {
-      position: relative !important;
-      top: auto !important;
+      position: sticky !important;
+      top: 0 !important;
       left: auto !important;
       right: auto !important;
       display: flex !important;
@@ -593,7 +593,7 @@
       clear: both;
       height: auto !important;
       padding: 14px 5% !important;
-      z-index: 10;
+      z-index: 10000 !important;
     }
 
     /* Kill desktop links completely */
