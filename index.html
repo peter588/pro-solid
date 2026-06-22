@@ -8,7 +8,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Mulish:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/css/glightbox.min.css">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -517,8 +516,68 @@
   .about-photo-link:hover .about-photo-overlay { background: rgba(0,0,0,0.35); }
   .about-photo-link:hover .about-photo-overlay svg { opacity: 1; }
 
-  /* Hidden gallery grid (anchor pool for GLightbox) */
-  #gallery-pool { display: none; }
+  /* ── CUSTOM LIGHTBOX ── */
+  #ps-lb {
+    display: none;
+    position: fixed; inset: 0; z-index: 99999;
+    background: rgba(0,0,0,0.93);
+    align-items: center; justify-content: center;
+  }
+  #ps-lb.open { display: flex; }
+
+  #ps-lb-stage {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    max-width: 90vw; max-height: 85vh;
+  }
+  #ps-lb-img {
+    display: block;
+    max-width: 90vw; max-height: 85vh;
+    width: auto; height: auto;
+    object-fit: contain;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+  #ps-lb-close {
+    position: fixed; top: 20px; right: 28px;
+    background: none; border: none; cursor: pointer;
+    color: #fff; font-size: 32px; line-height: 1;
+    opacity: 0.75; transition: opacity 0.2s;
+    padding: 4px 8px; z-index: 2;
+  }
+  #ps-lb-close:hover { opacity: 1; }
+  #ps-lb-prev, #ps-lb-next {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    background: rgba(212,135,14,0.15);
+    border: 1px solid rgba(212,135,14,0.4);
+    color: var(--accent2); font-size: 28px; line-height: 1;
+    cursor: pointer; padding: 14px 18px;
+    transition: background 0.2s, color 0.2s;
+    z-index: 2;
+  }
+  #ps-lb-prev { left: 20px; }
+  #ps-lb-next { right: 20px; }
+  #ps-lb-prev:hover, #ps-lb-next:hover {
+    background: rgba(212,135,14,0.4); color: #fff;
+  }
+  #ps-lb-counter {
+    position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+    font-family: 'Mulish', sans-serif; font-size: 13px;
+    color: rgba(255,255,255,0.55); letter-spacing: 0.08em;
+    z-index: 2; pointer-events: none;
+  }
+  #ps-lb-loading {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+  }
+  #ps-lb-loading span {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 3px solid rgba(212,135,14,0.25);
+    border-top-color: var(--accent);
+    animation: ps-spin 0.7s linear infinite;
+  }
+  @keyframes ps-spin { to { transform: rotate(360deg); } }
 
   /* ── ANIMATIONS ── */
   @keyframes fadeUp {
@@ -894,8 +953,17 @@
 
 
 
-<!-- Hidden pool of all gallery images for GLightbox -->
-<div id="gallery-pool" aria-hidden="true"></div>
+<!-- ══ CUSTOM LIGHTBOX ══ -->
+<div id="ps-lb" role="dialog" aria-modal="true" aria-label="Galeria realizacji PRO-SOLID">
+  <button id="ps-lb-close" aria-label="Zamknij galerię">✕</button>
+  <button id="ps-lb-prev" aria-label="Poprzednie zdjęcie">&#10094;</button>
+  <div id="ps-lb-stage">
+    <div id="ps-lb-loading"><span></span></div>
+    <img id="ps-lb-img" src="" alt="Realizacja PRO-SOLID">
+  </div>
+  <button id="ps-lb-next" aria-label="Następne zdjęcie">&#10095;</button>
+  <div id="ps-lb-counter"></div>
+</div>
 
 <!-- ══ FOOTER ══ -->
 <footer>
@@ -909,67 +977,117 @@
   </nav>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/js/glightbox.min.js"></script>
 <script>
+  /* ── MOBILE MENU ── */
   function toggleMenu() {
     var m = document.getElementById('mobile-menu');
     m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
   }
 
-  /* ── GALLERY ── */
+  /* ── RANDOM PHOTO IN ABOUT FRAME ── */
   var PHOTO_COUNT = 44;
+  var randomIndex = Math.floor(Math.random() * PHOTO_COUNT);
+  document.getElementById('about-main-photo').src = 'images/photo' + (randomIndex + 1) + '.jpg';
 
-  var galleryElements = [];
-  for (var i = 1; i <= PHOTO_COUNT; i++) {
-    galleryElements.push({
-      href: 'images/photo' + i + '.jpg',
-      type: 'image',
-      description: 'Realizacja PRO-SOLID – zdjęcie ' + i + ' / ' + PHOTO_COUNT
-    });
+  /* ── CUSTOM LIGHTBOX ── */
+  var psLb       = document.getElementById('ps-lb');
+  var psLbImg    = document.getElementById('ps-lb-img');
+  var psLbCount  = document.getElementById('ps-lb-counter');
+  var psLbLoad   = document.getElementById('ps-lb-loading');
+  var psLbCur    = 0;
+
+  function psOpen(index) {
+    psLbCur = ((index % PHOTO_COUNT) + PHOTO_COUNT) % PHOTO_COUNT;
+    psLb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    psShow();
   }
 
-  var lightbox = GLightbox({
-    elements: galleryElements,
-    touchNavigation: true,
-    loop: true,
-    autoplayVideos: false,
-    svg: { close: '✕', next: '❯', prev: '❮' }
+  function psClose() {
+    psLb.classList.remove('open');
+    document.body.style.overflow = '';
+    psLbImg.src = '';
+  }
+
+  function psShow() {
+    psLbLoad.style.display = 'flex';
+    psLbImg.style.opacity  = '0';
+    var src = 'images/photo' + (psLbCur + 1) + '.jpg';
+    psLbCount.textContent  = (psLbCur + 1) + ' / ' + PHOTO_COUNT;
+    var tmp = new Image();
+    tmp.onload = function() {
+      psLbImg.src           = src;
+      psLbImg.style.opacity = '1';
+      psLbLoad.style.display = 'none';
+    };
+    tmp.onerror = function() {
+      psLbLoad.style.display = 'none';
+      psLbImg.style.opacity  = '1';
+    };
+    tmp.src = src;
+  }
+
+  function psNext() { psLbCur = (psLbCur + 1) % PHOTO_COUNT; psShow(); }
+  function psPrev() { psLbCur = (psLbCur - 1 + PHOTO_COUNT) % PHOTO_COUNT; psShow(); }
+
+  document.getElementById('ps-lb-close').addEventListener('click', psClose);
+  document.getElementById('ps-lb-next').addEventListener('click', psNext);
+  document.getElementById('ps-lb-prev').addEventListener('click', psPrev);
+
+  /* Close on overlay click (not on image/buttons) */
+  psLb.addEventListener('click', function(e) {
+    if (e.target === psLb) psClose();
   });
 
-  /* Pick a random photo for the about frame */
-  var randomIndex = Math.floor(Math.random() * PHOTO_COUNT);
-  var mainPhoto = document.getElementById('about-main-photo');
-  mainPhoto.src = 'images/photo' + (randomIndex + 1) + '.jpg';
+  /* Keyboard navigation */
+  document.addEventListener('keydown', function(e) {
+    if (!psLb.classList.contains('open')) return;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown')  psNext();
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')    psPrev();
+    if (e.key === 'Escape')                                psClose();
+  });
 
-  /* Clicking the frame photo opens lightbox at the displayed photo */
+  /* Touch swipe */
+  var psSwipeX = null;
+  psLb.addEventListener('touchstart', function(e) {
+    psSwipeX = e.touches[0].clientX;
+  }, { passive: true });
+  psLb.addEventListener('touchend', function(e) {
+    if (psSwipeX === null) return;
+    var dx = e.changedTouches[0].clientX - psSwipeX;
+    if (Math.abs(dx) > 40) { dx < 0 ? psNext() : psPrev(); }
+    psSwipeX = null;
+  }, { passive: true });
+
+  /* Trigger points */
   document.getElementById('about-photo-link').addEventListener('click', function(e) {
     e.preventDefault();
-    lightbox.openAt(randomIndex);
+    psOpen(randomIndex);
   });
-
-  /* "GALERIA" nav link – opens lightbox at first photo */
   document.getElementById('nav-galeria').addEventListener('click', function(e) {
     e.preventDefault();
-    lightbox.openAt(0);
+    psOpen(0);
   });
-
   document.getElementById('mobile-galeria').addEventListener('click', function(e) {
     e.preventDefault();
-    lightbox.openAt(0);
+    psOpen(0);
   });
 
-  /* ── Subtle scroll-reveal ── */
+  /* ── SMOOTH IMAGE TRANSITION ── */
+  document.getElementById('ps-lb-img').style.transition = 'opacity 0.2s ease';
+
+  /* ── SCROLL-REVEAL ── */
   var observer = new IntersectionObserver(function(entries) {
     entries.forEach(function(e) {
       if (e.isIntersecting) {
-        e.target.style.opacity = '1';
+        e.target.style.opacity   = '1';
         e.target.style.transform = 'translateY(0)';
       }
     });
   }, { threshold: 0.1 });
 
   document.querySelectorAll('.offer-card, .why-card').forEach(function(el, i) {
-    el.style.opacity = '0';
+    el.style.opacity   = '0';
     el.style.transform = 'translateY(20px)';
     el.style.transition = 'opacity 0.5s ease ' + (i * 0.07) + 's, transform 0.5s ease ' + (i * 0.07) + 's';
     observer.observe(el);
