@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Mulish:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/css/glightbox.min.css">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -492,6 +493,33 @@
     .contact-form { padding: 28px 20px; }
   }
 
+  /* ── GALLERY PHOTO IN ABOUT FRAME ── */
+  .about-frame-corner { z-index: 2; }
+  .about-photo-link {
+    position: absolute; inset: 0;
+    display: block; cursor: pointer;
+    text-decoration: none;
+  }
+  .about-main-photo {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+  }
+  .about-photo-overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0);
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.3s;
+  }
+  .about-photo-overlay svg {
+    opacity: 0; transition: opacity 0.3s;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6));
+  }
+  .about-photo-link:hover .about-photo-overlay { background: rgba(0,0,0,0.35); }
+  .about-photo-link:hover .about-photo-overlay svg { opacity: 1; }
+
+  /* Hidden gallery grid (anchor pool for GLightbox) */
+  #gallery-pool { display: none; }
+
   /* ── ANIMATIONS ── */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(24px); }
@@ -530,6 +558,7 @@
     <li><a href="#oferta">Oferta</a></li>
     <li><a href="#o-firmie">O firmie</a></li>
     <li><a href="#dlaczego">Dlaczego my</a></li>
+    <li><a href="#" id="nav-galeria">Galeria</a></li>
     <li><a href="#kontakt" class="nav-cta">Kontakt</a></li>
   </ul>
   <div class="hamburger" onclick="toggleMenu()" aria-label="Menu">
@@ -543,6 +572,7 @@
   <a href="#oferta" onclick="toggleMenu()" style="font-family:'Oswald',sans-serif;font-size:28px;color:var(--text);text-decoration:none;letter-spacing:0.05em;">Oferta</a>
   <a href="#o-firmie" onclick="toggleMenu()" style="font-family:'Oswald',sans-serif;font-size:28px;color:var(--text);text-decoration:none;letter-spacing:0.05em;">O firmie</a>
   <a href="#dlaczego" onclick="toggleMenu()" style="font-family:'Oswald',sans-serif;font-size:28px;color:var(--text);text-decoration:none;letter-spacing:0.05em;">Dlaczego my</a>
+  <a href="#" id="mobile-galeria" onclick="toggleMenu()" style="font-family:'Oswald',sans-serif;font-size:28px;color:var(--text);text-decoration:none;letter-spacing:0.05em;">Galeria</a>
   <a href="#kontakt" onclick="toggleMenu()" style="font-family:'Oswald',sans-serif;font-size:28px;color:var(--accent);text-decoration:none;letter-spacing:0.05em;">Kontakt</a>
   <div onclick="toggleMenu()" style="position:absolute;top:20px;right:24px;cursor:pointer;font-size:28px;color:var(--muted);">✕</div>
 </div>
@@ -696,10 +726,12 @@
         <div class="about-frame-corner tr"></div>
         <div class="about-frame-corner bl"></div>
         <div class="about-frame-corner br"></div>
-        <div class="about-frame-icon">
-          <svg viewBox="0 0 24 24"><path d="M2 20h20M4 20V10L12 4l8 6v10"/><path d="M9 20v-6h6v6"/><path d="M12 4v4"/></svg>
-        </div>
-        <div class="about-frame-text">PRO-SOLID</div>
+        <a href="#" id="about-photo-link" class="about-photo-link" aria-label="Otwórz galerię realizacji">
+          <img id="about-main-photo" src="" alt="Realizacja PRO-SOLID" class="about-main-photo">
+          <div class="about-photo-overlay">
+            <svg viewBox="0 0 24 24" width="52" height="52" stroke="#fff" fill="none" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+          </div>
+        </a>
       </div>
       <div class="about-badge">
         <strong>PRO</strong>
@@ -862,6 +894,9 @@
 
 
 
+<!-- Hidden pool of all gallery images for GLightbox -->
+<div id="gallery-pool" aria-hidden="true"></div>
+
 <!-- ══ FOOTER ══ -->
 <footer>
   <div class="footer-copy">
@@ -874,13 +909,56 @@
   </nav>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/js/glightbox.min.js"></script>
 <script>
   function toggleMenu() {
     var m = document.getElementById('mobile-menu');
     m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
   }
 
-  /* Subtle scroll-reveal */
+  /* ── GALLERY ── */
+  var PHOTO_COUNT = 44;
+
+  var galleryElements = [];
+  for (var i = 1; i <= PHOTO_COUNT; i++) {
+    galleryElements.push({
+      href: 'images/photo' + i + '.jpg',
+      type: 'image',
+      description: 'Realizacja PRO-SOLID – zdjęcie ' + i + ' / ' + PHOTO_COUNT
+    });
+  }
+
+  var lightbox = GLightbox({
+    elements: galleryElements,
+    touchNavigation: true,
+    loop: true,
+    autoplayVideos: false,
+    svg: { close: '✕', next: '❯', prev: '❮' }
+  });
+
+  /* Pick a random photo for the about frame */
+  var randomIndex = Math.floor(Math.random() * PHOTO_COUNT);
+  var mainPhoto = document.getElementById('about-main-photo');
+  mainPhoto.src = 'images/photo' + (randomIndex + 1) + '.jpg';
+
+  /* Clicking the frame photo opens lightbox at the displayed photo */
+  document.getElementById('about-photo-link').addEventListener('click', function(e) {
+    e.preventDefault();
+    lightbox.openAt(randomIndex);
+  });
+
+  /* "GALERIA" nav link – opens lightbox at first photo */
+  document.getElementById('nav-galeria').addEventListener('click', function(e) {
+    e.preventDefault();
+    lightbox.openAt(0);
+  });
+
+  document.getElementById('mobile-galeria').addEventListener('click', function(e) {
+    e.preventDefault();
+    lightbox.openAt(0);
+  });
+
+  /* ── Subtle scroll-reveal ── */
   var observer = new IntersectionObserver(function(entries) {
     entries.forEach(function(e) {
       if (e.isIntersecting) {
