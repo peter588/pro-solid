@@ -38,11 +38,13 @@
   /* ── EU FUNDING BAR ── */
   #eu-bar {
     position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    height: auto; min-height: 0;
     background: #ffffff;
     border-bottom: 3px solid #003399;
     padding: 10px 5%;
     display: flex; align-items: center; justify-content: space-between;
-    gap: 20px; flex-wrap: wrap;
+    gap: 16px; flex-wrap: nowrap;
+    overflow: visible;
   }
   #eu-bar .eu-logo-wrap {
     display: flex; align-items: center;
@@ -56,9 +58,9 @@
     font-family: 'Mulish', sans-serif;
     font-size: 12px; font-weight: 500;
     color: #1a1a1a; line-height: 1.5;
-    max-width: 520px;
     border-left: 3px solid #003399;
     padding-left: 16px;
+    flex: 1 1 0; min-width: 0;
   }
   #eu-bar .eu-text strong {
     display: block; font-size: 11px; font-weight: 700;
@@ -66,14 +68,24 @@
     text-transform: uppercase; margin-bottom: 3px;
   }
   @media (max-width: 700px) {
-    #eu-bar { padding: 10px 4%; }
-    #eu-bar .eu-logo-wrap img { height: 42px; }
-    #eu-bar .eu-text { font-size: 11px; border-left: none; padding-left: 0; }
+    #eu-bar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 10px 4% 12px;
+    }
+    #eu-bar .eu-logo-wrap img { height: 38px; }
+    #eu-bar .eu-text {
+      font-size: 10.5px;
+      border-left: none; padding-left: 0;
+      border-top: 2px solid #003399; padding-top: 8px;
+      width: 100%;
+    }
   }
 
   /* ── NAVIGATION ── */
   nav {
-    position: fixed; top: 80px; left: 0; right: 0; z-index: 201;
+    position: fixed; top: 80px; left: 0; right: 0; z-index: 100;
     background: rgba(20, 28, 38, 0.96);
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--border);
@@ -81,6 +93,8 @@
     display: flex; align-items: center; justify-content: space-between;
     height: 70px;
   }
+  /* CSS fallback – JS syncNavTop() overrides this with exact measured value */
+  @media (max-width: 700px) { nav { top: 110px; } }
   .nav-logo {
     display: flex; align-items: center; gap: 12px;
     text-decoration: none;
@@ -549,9 +563,8 @@
   .footer-links a:hover { color: var(--accent); }
 
   /* ── RESPONSIVE ── */
+  /* Layout collapse at 900px */
   @media (max-width: 900px) {
-    .nav-links { display: none; }
-    .hamburger { display: flex; }
     .about-layout,
     .contact-layout { grid-template-columns: 1fr; }
     .about-badge { display: none; }
@@ -559,6 +572,11 @@
     #hero { flex-direction: column; justify-content: center; }
     .hero-content { max-width: 100%; }
     .form-row { grid-template-columns: 1fr; }
+  }
+  /* Mobile nav: hide desktop links, show hamburger at 768px */
+  @media (max-width: 768px) {
+    .nav-links { display: none !important; }
+    .hamburger { display: flex !important; }
   }
   @media (max-width: 600px) {
     section { padding: 70px 5%; }
@@ -1064,6 +1082,8 @@
   }
   syncNavTop();
   window.addEventListener('resize', syncNavTop);
+  /* Re-sync after images load (logo in EU bar affects its height) */
+  window.addEventListener('load', syncNavTop);
 
   /* ── MOBILE MENU ── */
   var _menu = document.getElementById('mobile-menu');
