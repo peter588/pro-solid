@@ -529,6 +529,25 @@
   .form-group textarea:focus { border-color: rgba(212,135,14,0.6); }
   .form-group textarea { min-height: 110px; }
   .form-note { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+  .form-status {
+    display: none;
+    padding: 14px 18px;
+    font-size: 14px; font-weight: 500;
+    margin-bottom: 16px;
+    border-left: 3px solid;
+  }
+  .form-status.success {
+    display: block;
+    background: rgba(34,197,94,0.08);
+    border-color: #22c55e;
+    color: #16a34a;
+  }
+  .form-status.error {
+    display: block;
+    background: rgba(239,68,68,0.08);
+    border-color: #ef4444;
+    color: #dc2626;
+  }
 
   /* ── FOOTER ── */
   footer {
@@ -1040,40 +1059,44 @@
 
     <div class="contact-form">
       <h3>Napisz do nas</h3>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Imię i nazwisko</label>
-          <input type="text" placeholder="Jan Kowalski">
+      <form id="contact-form" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cf-name">Imię i nazwisko</label>
+            <input id="cf-name" name="name" type="text" placeholder="Jan Kowalski" required>
+          </div>
+          <div class="form-group">
+            <label for="cf-tel">Telefon</label>
+            <input id="cf-tel" name="tel" type="tel" placeholder="+48 000 000 000">
+          </div>
         </div>
         <div class="form-group">
-          <label>Telefon</label>
-          <input type="tel" placeholder="+48 000 000 000">
+          <label for="cf-email">Adres e-mail</label>
+          <input id="cf-email" name="email" type="email" placeholder="adres@email.pl" required>
         </div>
-      </div>
-      <div class="form-group">
-        <label>Adres e-mail</label>
-        <input type="email" placeholder="adres@email.pl">
-      </div>
-      <div class="form-group">
-        <label>Rodzaj usługi</label>
-        <select>
-          <option value="" disabled selected>Wybierz zakres prac…</option>
-          <option>Remont / wykończenie wnętrz</option>
-          <option>Prace ogólnobudowlane</option>
-          <option>Instalacje (hydraulika, CO)</option>
-          <option>Dach (krycie, remont)</option>
-          <option>Izolacje i drenaże</option>
-          <option>Prace zewnętrzne</option>
-          <option>Zakres kompleksowy</option>
-          <option>Inne</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Opis zlecenia</label>
-        <textarea placeholder="Opisz krótko zakres prac, lokalizację i preferowany termin realizacji…"></textarea>
-      </div>
-      <p class="form-note">* Formularz poglądowy – przed publikacją zostanie podpięty pod skrzynkę e-mail.</p>
-      <button class="btn-primary" style="width:100%; text-align:center; border:none;">Wyślij zapytanie</button>
+        <div class="form-group">
+          <label for="cf-service">Rodzaj usługi</label>
+          <select id="cf-service" name="service">
+            <option value="" disabled selected>Wybierz zakres prac…</option>
+            <option>Remont / wykończenie wnętrz</option>
+            <option>Prace ogólnobudowlane</option>
+            <option>Instalacje (hydraulika, CO)</option>
+            <option>Dach (krycie, remont)</option>
+            <option>Izolacje i drenaże</option>
+            <option>Prace zewnętrzne</option>
+            <option>Zakres kompleksowy</option>
+            <option>Inne</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="cf-message">Opis zlecenia</label>
+          <textarea id="cf-message" name="message" placeholder="Opisz krótko zakres prac, lokalizację i preferowany termin realizacji…" required></textarea>
+        </div>
+        <div id="cf-status" class="form-status" role="alert"></div>
+        <button id="cf-submit" class="btn-primary" type="submit" style="width:100%; text-align:center; border:none;">
+          Wyślij zapytanie
+        </button>
+      </form>
     </div>
   </div>
 </section>
@@ -1240,6 +1263,69 @@
 
   /* ── SMOOTH IMAGE TRANSITION ── */
   document.getElementById('ps-lb-img').style.transition = 'opacity 0.2s ease';
+
+  /* ── CONTACT FORM ── */
+  (function () {
+    var form    = document.getElementById('contact-form');
+    var submit  = document.getElementById('cf-submit');
+    var status  = document.getElementById('cf-status');
+
+    function showStatus(type, msg) {
+      status.className = 'form-status ' + type;
+      status.textContent = msg;
+      status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function clearStatus() {
+      status.className = 'form-status';
+      status.textContent = '';
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      clearStatus();
+
+      var name    = document.getElementById('cf-name').value.trim();
+      var email   = document.getElementById('cf-email').value.trim();
+      var message = document.getElementById('cf-message').value.trim();
+
+      if (!name || !email || !message) {
+        showStatus('error', 'Uzupełnij wymagane pola: imię, e-mail i opis zlecenia.');
+        return;
+      }
+
+      submit.disabled = true;
+      submit.textContent = 'Wysyłanie…';
+
+      fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name:    name,
+          tel:     document.getElementById('cf-tel').value.trim(),
+          email:   email,
+          service: document.getElementById('cf-service').value,
+          message: message,
+        }),
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data.success) {
+            showStatus('success', '✓ Wiadomość wysłana! Odezwiemy się wkrótce.');
+            form.reset();
+          } else {
+            showStatus('error', data.error || 'Wystąpił błąd. Spróbuj ponownie.');
+          }
+        })
+        .catch(function () {
+          showStatus('error', 'Brak połączenia z serwerem. Sprawdź internet i spróbuj ponownie.');
+        })
+        .finally(function () {
+          submit.disabled = false;
+          submit.textContent = 'Wyślij zapytanie';
+        });
+    });
+  })();
 
   /* ── SCROLL-REVEAL ── */
   var observer = new IntersectionObserver(function(entries) {
